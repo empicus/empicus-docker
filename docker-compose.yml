@@ -1,0 +1,57 @@
+version: '2.1'
+services:
+
+    platform_data:
+        build: platform-data/
+        restart: always
+        networks:
+            alstranet:
+                ipv4_address: 172.22.0.2
+
+    platform:
+        build:
+            context: ./platform-web/platform/
+            dockerfile: Dockerfile
+            args:
+                DB_URL: mysql:3306
+        depends_on: 
+            platform_data:
+                condition: service_healthy
+        links:
+            - platform_data:mysql
+        restart: always
+        networks:
+            alstranet:
+                ipv4_address: 172.22.0.3
+
+#    admin_portal:
+#        build: platform-web/admin-portal/
+#        networks:
+#            alstranet:
+#                ipv4_address: 172.22.0.4
+
+#    client_portal:
+#        build: platform-web/client-portal/
+#        networks:
+#            alstranet:
+#                ipv4_address: 172.22.0.5
+
+#    platform-httpd:
+#        build: platform-httpd/
+#        ports:
+#            - "80:80"
+#            - "443:443"
+#        restart: always
+#        networks:
+#            alstranet:
+#                ipv4_address: 172.22.0.7
+
+networks:
+    alstranet:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.22.0.0/24
+
+
+
