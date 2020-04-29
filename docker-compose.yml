@@ -4,6 +4,10 @@ services:
     platform_data:
         build: platform-data/
         restart: always
+        environment:
+            MYSQL_DATABASE: $MYSQL_DATABASE
+            MYSQL_USER: $MYSQL_USER
+            MYSQL_PASSWORD: $MYSQL_PASSWORD
         networks:
             alstranet:
                 ipv4_address: 172.22.0.2
@@ -14,15 +18,52 @@ services:
             dockerfile: Dockerfile
             args:
                 DB_URL: mysql:3306
+                MYSQL_DATABASE: $MYSQL_DATABASE
+                MYSQL_USER: $MYSQL_USER
+                MYSQL_PASSWORD: $MYSQL_PASSWORD
+                PLATFORM_DS_NAME: $PLATFORM_DS_NAME
+                JBPM_MYSQL_DATABASE: $JBPM_MYSQL_DATABASE
+                JBPM_MYSQL_USER: $JBPM_MYSQL_USER
+                JBPM_MYSQL_PASSWORD: $JBPM_MYSQL_PASSWORD
+                JBPM_DS_NAME: $JBPM_DS_NAME
+                MYSQL_CONNECTOR: $MYSQL_CONNECTOR
+                MYSQL_VERSION: $MYSQL_VERSION
+                WILDFLY_USER: $WILDFLY_USER
+                WILDFLY_PASSWORD: $WILDFLY_PASSWORD
+                WILDFLY_HOME: $WILDFLY_HOME
+                WILDFLY_CLI: $WILDFLY_CLI
+                WILDFLY_DEPLOYMENT_DIR: $WILDFLY_DEPLOYMENT_DIR
         depends_on: 
             platform_data:
                 condition: service_healthy
         links:
             - platform_data:mysql
         restart: always
+        environment:
+            MYSQL_DATABASE: $MYSQL_DATABASE
+            MYSQL_USER: $MYSQL_USER
+            MYSQL_PASSWORD: $MYSQL_PASSWORD
+            PLATFORM_DS_NAME: $PLATFORM_DS_NAME
+            JBPM_MYSQL_DATABASE: $JBPM_MYSQL_DATABASE
+            JBPM_MYSQL_USER: $JBPM_MYSQL_USER
+            JBPM_MYSQL_PASSWORD: $JBPM_MYSQL_PASSWORD
+            JBPM_DS_NAME: $JBPM_DS_NAME
+            MYSQL_CONNECTOR: $MYSQL_CONNECTOR
+            MYSQL_VERSION: $MYSQL_VERSION
+            WILDFLY_USER: $WILDFLY_USER
+            WILDFLY_PASSWORD: $WILDFLY_PASSWORD
+            WILDFLY_HOME: $WILDFLY_HOME
+            WILDFLY_CLI: $WILDFLY_CLI
+            WILDFLY_DEPLOYMENT_DIR: $WILDFLY_DEPLOYMENT_DIR
         networks:
             alstranet:
                 ipv4_address: 172.22.0.3
+            
+    client_portal:
+        build: platform-web/client-portal/
+        networks:
+            alstranet:
+                ipv4_address: 172.22.0.4
 
 #    admin_portal:
 #        build: platform-web/admin-portal/
